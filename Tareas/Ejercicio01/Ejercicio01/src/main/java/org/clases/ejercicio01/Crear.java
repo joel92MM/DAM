@@ -8,10 +8,21 @@ import java.io.IOException;
 import java.util.List;
 
 public class Crear {
-        public void crearArchivo(List<Empleado> empleados, String archivo) throws IOException {
+        public void crearArchivo(List<Empleado> empleados, String archivo, String extension) throws IOException {
                 String userHome = System.getProperty("user.home"); // Ruta al directorio de usuario
-                File fichero = new File(userHome+"/Documentos/DAM/Tareas/Ejercicio01/" + archivo+".txt");
-        try (
+//                File fichero = new File(userHome+"/Documentos/DAM/Tareas/Ejercicio01/" + archivo+".txt");
+                File fichero = new File("src/main/resources/archivos/"+archivo+"."+extension);
+
+            try {
+                    if (fichero.createNewFile())
+                    System.out.println("El fichero se ha creado correctamente en la ruta "+ fichero.getAbsolutePath());
+                else
+                    System.out.println("No ha podido ser creado el fichero");
+                } catch (IOException ioe) {
+                ioe.printStackTrace();
+                }
+
+            try (
                 BufferedWriter writer = new BufferedWriter(new FileWriter(fichero))) {
                 for (Empleado empleado : empleados) {
                     writer.write(empleado.toString());

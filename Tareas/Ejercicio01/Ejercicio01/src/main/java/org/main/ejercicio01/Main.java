@@ -5,6 +5,7 @@ import org.clases.ejercicio01.Empleado;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,43 +16,41 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         JOptionPane.showMessageDialog(null, "Bienvenido al programa de empleados");
-
-        String userHome = System.getProperty("user.home"); // Ruta al directorio de usuario
-        System.out.println(userHome);
         // Crear una lista de empleados
-        List<Empleado> empleados = new ArrayList<>();
+        ArrayList<Empleado> empleados = new ArrayList<>();
+        empleados.add(new Empleado(1, "Juan", "Calle 1", 10000, 1000));
+        empleados.add(new Empleado(2, "Maria", "Calle 2", 15000, 1500));
+        empleados.add(new Empleado(3, "Pedro", "Calle 3", 20000, 2000));
+        empleados.add(new Empleado(4, "Ana", "Calle 4", 12000, 1200));
+        empleados.add(new Empleado(5, "Jose", "Calle 5", 18000, 1800));
 
-
-        //Preguntamos al usuario, cuantos empleados quiere guardar en el fichero
-        int numeroEmpleados=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de empleados"));
-
-        for (int i = 0; i < numeroEmpleados; i++) {
-            int codigo=Integer.parseInt(JOptionPane.showInputDialog("Ingrese el codigo del empleado"));
-            String nombre=JOptionPane.showInputDialog("Ingrese el nombre del empleado");
-            String direccion=JOptionPane.showInputDialog("Ingrese la direccion del empleado");
-            float salario=Float.parseFloat(JOptionPane.showInputDialog("Ingrese el salario del empleado"));
-            float comision=Float.parseFloat(JOptionPane.showInputDialog("Ingrese la comision del empleado"));
-
-            Empleado empleado = new Empleado(codigo,nombre,direccion,salario,comision);
-            empleados.add(empleado);
-            //System.out.println(empleado.toString());
-
-/*            Empleado empleado = new Empleado();
-            empleado.setCodigo(codigo);
-            empleado.setDireccion(direccion);
-            empleado.setNombre(nombre);
-            empleado.setSalario(salario);
-            empleado.setComision(comision);*/
-        }
-
+    try{
         //Creamos el archivo donde guardamos al empleado
         String nombre=JOptionPane.showInputDialog("Ingrese el nombre del archivo para guardar el empleado");
-        Crear crear = new Crear();
-        crear.crearArchivo(empleados, nombre);
+        String extension=JOptionPane.showInputDialog("Ingrese la extensión del archivo");
+        RandomAccessFile aleatorio = new RandomAccessFile(nombre+"."+extension, "rw");
 
+        //Crear crear = new Crear();
+        for (Empleado empleado : empleados) {
+            aleatorio.writeInt(empleado.getCodigo());
 
+            StringBuffer sb = new StringBuffer(empleado.getNombre());
+            sb.setLength(10);
 
+            aleatorio.writeChars(sb.toString());
 
+            sb=new StringBuffer(empleado.getDireccion());
+            sb.setLength(20);
+            aleatorio.writeChars(sb.toString());
+
+            aleatorio.writeFloat(empleado.getSalario());
+            aleatorio.writeFloat(empleado.getComision());
+        }
+
+        aleatorio.close();
+        }catch(Exception e){
+            System.out.println("Error: "+e.getMessage());
+        }
 
 
     }

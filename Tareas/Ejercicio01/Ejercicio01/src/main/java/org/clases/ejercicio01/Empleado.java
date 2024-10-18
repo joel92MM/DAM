@@ -18,11 +18,11 @@ public class Empleado {
     private float salario;
     private float comision;
 
-    @Override
+  /*  @Override
     public String toString() {
         return "Empleado: " + nombre + " con codigo "+
                 + codigo + ", direccion " + direccion +
                 " tiene un salario de " + salario +
                 "€ y una comision de " + comision +"€"+'\n';
-    }
+    }*/
 }
