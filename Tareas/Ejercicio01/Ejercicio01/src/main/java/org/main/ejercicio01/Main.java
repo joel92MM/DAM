@@ -2,6 +2,8 @@ package org.main.ejercicio01;
 
 import org.clases.ejercicio01.Crear;
 import org.clases.ejercicio01.Empleado;
+import org.clases.ejercicio01.Leer;
+import org.clases.ejercicio01.XmlGenerator;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        // Clase Scanner para que pida por pantalla
+        // Clase Scanner o JpOptionPane para que pida por pantalla
 
         Scanner sc = new Scanner(System.in);
         JOptionPane.showMessageDialog(null, "Bienvenido al programa de empleados");
@@ -30,28 +32,43 @@ public class Main {
         String extension=JOptionPane.showInputDialog("Ingrese la extensión del archivo");
         RandomAccessFile aleatorio = new RandomAccessFile(nombre+"."+extension, "rw");
 
-        //Crear crear = new Crear();
+
         for (Empleado empleado : empleados) {
+            //Escribimos el codigo del empleado
             aleatorio.writeInt(empleado.getCodigo());
 
+            // Escribimos el nombre del empleado (cadena fija de 20 caracteres)
             StringBuffer sb = new StringBuffer(empleado.getNombre());
-            sb.setLength(10);
-
+            sb.setLength(20);//Longitud del nombre
             aleatorio.writeChars(sb.toString());
 
+            // Escribimos la direccion del empleado (cadena fija de 20 caracteres)
             sb=new StringBuffer(empleado.getDireccion());
-            sb.setLength(20);
+            sb.setLength(20);//longitud de la direccion
             aleatorio.writeChars(sb.toString());
 
+            // Escribimos el salario y la comisión (números de punto flotante)
             aleatorio.writeFloat(empleado.getSalario());
             aleatorio.writeFloat(empleado.getComision());
         }
-
+        // Cerramos el archivo una vez que hemos terminado de escribir en él
         aleatorio.close();
+        JOptionPane.showMessageDialog(null, "Archivo creado con éxito");
+
         }catch(Exception e){
             System.out.println("Error: "+e.getMessage());
         }
 
+    //Leer el archivo que acabamos de crear
+        String[] tiposDeAtributos = {"int", "string", "string", "float", "float"};
+        String[] nombresDeAtributos = {"codigo", "nombre", "direccion", "salario", "comision"};
+
+        String nombreArchivoXML=JOptionPane.showInputDialog("Ingrese el nombre del archivo xml para guardar la informacion de empleados.dat");
+        String nombreElemento=JOptionPane.showInputDialog("Ingrese el nombre del elemento padre de los atributos");
+
+        XmlGenerator generador = new XmlGenerator();
+        generador.generateXml("EMPLEADOS.DAT", tiposDeAtributos, nombresDeAtributos, nombreArchivoXML,
+                 nombreElemento);
 
     }
 }
