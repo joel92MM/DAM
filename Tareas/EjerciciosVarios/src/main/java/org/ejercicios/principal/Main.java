@@ -2,6 +2,8 @@ package org.ejercicios.principal;
 
 import org.ejercicios.Ejercicio01;
 import org.ejercicios.Ejercicio02;
+import org.ejercicios.Ejercicio03;
+import org.ejercicios.Ejercicio04;
 
 import javax.swing.*;
 
@@ -10,7 +12,7 @@ import javax.swing.*;
 public class Main {
     public static void main(String[] args) {
         JOptionPane.showMessageDialog(null, "Bienvenido al programa de ejercicios de Java");
-
+         String ruta= "src/main/resources/prueba/";
 
         boolean salir = false;
 
@@ -130,9 +132,15 @@ public class Main {
                     ejercicio02.borrarArchivoExistente(nombreABorrar);
                     break;
                 case 3:
+                    String directorio=JOptionPane.showInputDialog("Ingrese el nombre del directorio");
+                    Ejercicio03 ejercicio03=new Ejercicio03();
+                    ejercicio03.crearDirectorio(ruta,directorio);
                     break;
                 case 4:
-
+                    String cadena=JOptionPane.showInputDialog("Ingrese la cadena a escribir en el archivo");
+                    String archivo=JOptionPane.showInputDialog("Ingrese el nombre del archivo");
+                    Ejercicio04 ejercicio04=new Ejercicio04();
+                    ejercicio04.escribirCadena(cadena,archivo,ruta);
                     break;
                 case 5:
 
