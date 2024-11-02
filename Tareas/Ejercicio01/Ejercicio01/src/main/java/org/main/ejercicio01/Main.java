@@ -103,9 +103,27 @@ public class Main {
         //Apartado 2
         ImprimirTodasEtiquetas tecnicas = new ImprimirTodasEtiquetas();
 
-        //Técnica DOM
-        tecnicas.tecnicaDom();
+        String[] opciones = {"Técnica DOM", "Técnica SAX"};
 
-        //Técnica SAX
+        int seleccion = JOptionPane.showOptionDialog(null,
+                "Seleccione la técnica para imprimir las etiquetas:",
+                "Selección de Técnica", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE,
+                null, opciones, opciones[0]);
+
+        // Ejecutar la técnica seleccionada usando switch
+        switch (seleccion) {
+            case 0: // Técnica DOM
+                tecnicas.tecnicaDom();
+                break;
+            case 1: // Técnica SAX
+                tecnicas.tecnicaSAX();
+                break;
+            case -1: // Opción cancelada
+                JOptionPane.showMessageDialog(null, "Selección cancelada.");
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "Selección no válida.");
+                break;
+        }
     }
 }

@@ -10,7 +10,13 @@ import javax.swing.text.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class ImprimirTodasEtiquetas {
@@ -35,7 +41,7 @@ public class ImprimirTodasEtiquetas {
                 //Nombre del nodo
                 String nodo= elemento.getNodeName();
                 if (elemento.getNodeType() == Node.ELEMENT_NODE) {
-                    //Atributo Año
+                    //Atributo anio
                     Node anio = elemento.getAttributes().getNamedItem("año");
                     JOptionPane.showMessageDialog(null, nodo + " " + (i + 1) + " - " + anio);
                     NodeList detallesLibro = elemento.getChildNodes();
@@ -65,7 +71,6 @@ public class ImprimirTodasEtiquetas {
                                                 case "nombre" -> nombre = elementoAutor.getTextContent().trim();
                                             }
                                         }
-
                                     }
                                     JOptionPane.showMessageDialog(null, "Autor\n"+"Nombre: " + nombre + "\n Apellido: " + apellido);
 
@@ -75,12 +80,58 @@ public class ImprimirTodasEtiquetas {
                     }
                 }
             }
-
         } catch (ParserConfigurationException | IOException | SAXException  e) {
             throw new RuntimeException(e);
         }
     }
-    public void tecnicaSAX(Element elementos) {
+    public void tecnicaSAX() {
+        try {
+            XMLInputFactory xmlif = XMLInputFactory.newInstance();
+            XMLStreamReader leer = xmlif.createXMLStreamReader(new FileReader("libros.xml"));
 
+            // Variables
+            String titulo = "", nombre = "", apellido = "", editorial = "", precio = "", anio = "";
+            boolean esAutor = false;
+
+            while (leer.hasNext()) {
+                int eventType = leer.next();
+
+                if (eventType == XMLStreamConstants.START_ELEMENT) {
+                    String elementName = leer.getLocalName();
+
+                    switch (elementName) {
+                        case "libro" -> {
+                            anio = leer.getAttributeValue(null, "año");
+                            System.out.println("Libro - anio: " + anio);
+                        }
+                        case "titulo" -> System.out.println("Título: " + leer.getElementText());
+                        case "autor" -> esAutor = true;
+                        case "nombre" -> {
+                            if (esAutor) {
+                                nombre = leer.getElementText();
+                            }
+                        }
+                        case "apellido" -> {
+                            if (esAutor) {
+                                apellido = leer.getElementText();
+                                System.out.println("Autor - Nombre: " + nombre + ", Apellido: " + apellido);
+                                nombre = ""; // Limpiar para el próximo autor
+                                apellido = "";
+                            }
+                        }
+                        case "editorial" -> System.out.println("Editorial: " + leer.getElementText());
+                        case "precio" -> System.out.println("Precio: " + leer.getElementText());
+                    }
+                } else if (eventType == XMLStreamConstants.END_ELEMENT) {
+                    if (leer.getLocalName().equals("autor")) {
+                        esAutor = false;
+                    }
+                }
+            }
+
+        } catch (FileNotFoundException | XMLStreamException e) {
+            System.err.println("Archivo no encontrado: " + e.getMessage());
+       
+        }
     }
 }
