@@ -38,6 +38,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.11</version> <!-- Usa la última versión disponible -->
         </dependency>
+        <dependency>
+            <groupId>com.toedter</groupId>
+            <artifactId>jcalendar</artifactId>
+            <version>1.4</version>
+        </dependency>
 
     </dependencies>
 
