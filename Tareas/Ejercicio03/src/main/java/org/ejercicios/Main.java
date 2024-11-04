@@ -2,6 +2,7 @@ package org.ejercicios;
 
 import org.ejercicios.clases.ConexionJDBC;
 
+import javax.swing.*;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,13 +29,14 @@ public class Main {
             System.out.println("5. Borrar un vuelo");
             System.out.println("6. Modificar vuelos de fumadores a no fumadores");
             System.out.println("0. Salir");
+            System.out.print("\nOpcion: ");
             opcion = scanner.nextInt();
 
             switch (opcion) {
                 case 1 -> mostrarInformacionDB();
-               // case 2 -> mostrarTablaPasajeros();
-                //  case 3 -> verPasajerosDeVuelo();
-               // case 4 -> insertarVuelo();
+                case 2 -> mostrarTablaPasajeros();
+                case 3 -> verPasajeroDeVuelo();
+                case 4 -> insertarVuelo();
                // case 5 -> borrarVuelo();
                // case 6 -> modificarVuelosNoFumadores();
                 case 0 -> System.out.println("Saliendo...");
@@ -79,5 +81,56 @@ public class Main {
         } catch (SQLException | RuntimeException e) {
             System.out.println("Error al conectar con la base de datos: " + e.getMessage());
         }
+    }
+
+    private static void mostrarTablaPasajeros()  {
+        try {
+            conexion.abrirConexion();
+            ResultSet consulta = conexion.ejecutarConsulta("SELECT * FROM PASAJEROS");
+            while (consulta.next()) {
+                System.out.println("Pasajero número" + consulta.getString("num") + ", codigo de vuelo "
+                        +consulta.getString("cod_vuelo") + ", tipo de plaza " + consulta.getString("tipo_plaza") + ", fumador: " + consulta.getString("fumador") + ".\n");
+            }
+        } catch (SQLException |RuntimeException  e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+    }
+    private static void verPasajeroDeVuelo()  {
+        try {
+            conexion.abrirConexion();
+            ResultSet consulta = conexion.ejecutarConsulta("SELECT * FROM PASAJEROS WHERE num =138 AND cod_vuelo = 'SP-DC-438'");
+            while (consulta.next()) {
+                System.out.println("Pasajero número" + consulta.getString("num") + ", codigo de vuelo "
+                        +consulta.getString("cod_vuelo") + ", tipo de plaza " + consulta.getString("tipo_plaza") + ", fumador: " + consulta.getString("fumador") + ".\n");
+            }
+        } catch (SQLException |RuntimeException  e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+    }
+
+    private static void insertarVuelo()  {
+
+
+        try {
+            String num= JOptionPane.showInputDialog("Ingrese el número del pasajero");
+
+
+            String codVuelo = JOptionPane.showInputDialog("Ingrese el código de vuelo");
+
+
+            String tipoPlaza = JOptionPane.showInputDialog("Ingrese el tipo de plaza (ej. PR(Premium) o TR(Turista)");
+
+            String esFumador = JOptionPane.showInputDialog("¿Es fumador? (si/no): ");
+
+            String fumador = esFumador.toUpperCase().trim();
+            conexion.abrirConexion();
+            conexion.ejecutarConsulta("INSERT INTO PASAJEROS VALUES ('" + num + "', '" + codVuelo +
+                    "', '" + tipoPlaza + "', '" + fumador + "')");
+            System.out.println("Vuelo insertado con éxito.");
+
+        } catch (SQLException | RuntimeException e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+
     }
 }
