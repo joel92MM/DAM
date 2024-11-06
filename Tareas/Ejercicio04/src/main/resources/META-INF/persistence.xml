@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="aerolineaPU">
+        <class>org.ejercicios.entidades.Vuelo</class>
+        <class>org.ejercicios.entidades.Pasajero</class>
+
+        <properties>
+            <!-- Configuración de conexión a la base de datos -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/aerolinea" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="" />
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+
+            <!-- Propiedades de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
